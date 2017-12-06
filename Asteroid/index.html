@@ -13,12 +13,20 @@
 	
 	<script src="./three.min.js"></script>
 	<script>
-		var renderer, scene, camera, composer, skelet, asteroidBeltContainer;
+		var renderer, scene, camera, asteroidBeltContainer, asteroidSpeed = 1;
 		
 		window.onload = function() {
 			init();
 			animate();
 		}
+
+		window.wallpaperPropertyListener = {
+			applyUserProperties: function(properties) {
+				if (properties.asteroidspeed) {
+					asteroidSpeed = properties.asteroidspeed.value;
+        }
+			}
+		};
 		
 		function init() {
 			renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -153,7 +161,7 @@
 		function animate() {
 			requestAnimationFrame(animate);
 			
-			asteroidBeltContainer.rotation.x -= 0.0006;
+			asteroidBeltContainer.rotation.x -= 0.0006 * asteroidSpeed;
 			planet.rotation.y += 0.0002;
 			
 			renderer.clear();
