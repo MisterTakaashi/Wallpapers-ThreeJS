@@ -151,42 +151,9 @@
 			  var planet = new THREE.Mesh(geom, mat);
 			  planet.scale.x = planet.scale.y = planet.scale.z = 16;
 			  //circle.add(planet);
-			  
-			  var radius = 170;
-			  var r2 = radius * radius;
-			  for (var x = -radius; x <= radius; x++) {
-				var asteroidGeo = new THREE.SphereGeometry(8, 4, 2);
-  
-				asteroidGeo.vertices.forEach(v => {
-					v.x += THREE.Math.randFloatSpread(8);
-					v.y += THREE.Math.randFloatSpread(8);
-					v.z += THREE.Math.randFloatSpread(8);
-				  });
-	  
-				  asteroidGeo.computeFaceNormals();
-				  
-				  console.log(THREE.Math.randFloat(0,10));
-				//if (THREE.Math.randFloat(0,10) < 8.5) continue;
-			  
-				asteroid = new THREE.Mesh(asteroidGeo, asteroidMat);
-				reverseAsteroid = new THREE.Mesh(asteroidGeo, asteroidMat);
-				var y = Math.floor(Math.sqrt(r2 - x * x) + 0.5);
-				asteroid.position.set(THREE.Math.randFloatSpread(80), x, y - 10);
-				reverseAsteroid.position.set(THREE.Math.randFloatSpread(80), x, -y);
-				
-				asteroid.castShadow = true;
-				asteroid.receiveShadow = true;
-				
-				reverseAsteroid.castShadow = true;
-				reverseAsteroid.receiveShadow = true;
-				  
-				circle.add(asteroid);
-				circle.add(reverseAsteroid);
-				
-				console.log(x, y);
-			  }
 
-			  circle.rotation.z = 0.6;
+			  asteroidBelt.rotation.z = 0.6;
+			  //circle.rotation.y = 0;
 
 			  var ambientLight = new THREE.AmbientLight(0x999999 );
 			  scene.add(ambientLight);
@@ -204,6 +171,39 @@
 							  
 
 			  window.addEventListener('resize', onWindowResize, false);
+			  
+			  
+			  var radius   = 160,
+    segments = 90,
+    material = new THREE.LineBasicMaterial( { color: 0x0000ff } ),
+    geometry = new THREE.CircleGeometry( radius, segments );
+
+// Remove center vertex
+geometry.vertices.shift();
+
+for (var j = 0; j < geometry.vertices.length; j++) {
+	var asteroidGeo = new THREE.SphereGeometry(8, 4, 2);
+  
+				asteroidGeo.vertices.forEach(v => {
+					v.x += THREE.Math.randFloatSpread(4);
+					v.y += THREE.Math.randFloatSpread(4);
+					v.z += THREE.Math.randFloatSpread(4);
+				  });
+	  
+				  asteroidGeo.computeFaceNormals();
+				  
+				  console.log(THREE.Math.randFloat(0,10));
+				//if (THREE.Math.randFloat(0,10) < 8.5) continue;
+			  
+				asteroid = new THREE.Mesh(asteroidGeo, asteroidMat);
+				//asteroid.position.set(geometry.vertices[j].x, geometry.vertices[j].y, THREE.Math.randFloatSpread(80));
+				asteroid.position.set(THREE.Math.randFloatSpread(80), geometry.vertices[j].x, geometry.vertices[j].y);
+				
+				asteroid.castShadow = true;
+				asteroid.receiveShadow = true;
+				
+				circle.add(asteroid);
+}
 
 			};
 
@@ -218,8 +218,9 @@
 			  
 			  //particle.rotation.x += 0.0000;
 			  //particle.rotation.y -= 0.0002;
-			  asteroidBelt.rotation.x -= 0.0005;
-			  asteroidBelt.rotation.y -= 0.0005;
+			  circle.rotation.x -= 0.0033;
+			  //circle.rotation.y -= 0.0033;
+			  //asteroidBelt.rotation.z -= 0.0005;
 			  //sphere.rotation.x += 0.0004;
 			  sphere.rotation.y += 0.0002;
 			  
